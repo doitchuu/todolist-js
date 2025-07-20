@@ -1,0 +1,6 @@
+@import "./global.css";
+
+/* 컴포넌트 css */
+@import "./app.css";
+@import "./todoInput.css";
+@import "./todoList.css";
