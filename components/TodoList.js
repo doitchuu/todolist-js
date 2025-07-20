@@ -27,11 +27,16 @@ function TodoList($container, data) {
             todo.isCompleted ? "completed" : ""
           }" data-index="${index}">
             <div class="todo-item-content">
+              <button type="button" class="checkbox">
+                <img src="./assets/checkbox${
+                  todo.isCompleted ? "_completed" : ""
+                }.svg" />
+              </button>
               <span class="todo-text">${todo.name}</span>
             </div>
-            <div class="todo-actions">
-              <button type="button" class="todo-delete-btn">X</button>
-            </div>
+            <button type="button" class="todo-delete-btn">
+              <img src="./assets/delete.svg" />
+            </button>
           </li>
         `
           )
