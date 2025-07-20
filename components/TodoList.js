@@ -15,6 +15,7 @@ function TodoList($container, data) {
           </p>
         </div>
       `;
+
       return;
     }
 
