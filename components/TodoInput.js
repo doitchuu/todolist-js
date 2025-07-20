@@ -16,16 +16,14 @@ function TodoInput({
     const inputValue = this.isEditing ? this.editingText : "";
 
     this.$container.innerHTML = `
-      <div class="todo-input-container">
-        <input
-          type="text"
-          name="todo-input"
-          placeholder="할 일 입력(예: 아침 런닝하기 등)"
-          value="${inputValue}"
-          ${this.isEditing ? "readonly" : ""}
-        />
-        <button type="button" class="todo-btn">${label}</button>
-      </div>
+      <input
+        type="text"
+        name="todo-input"
+        placeholder="할 일 입력(예: 아침 런닝하기 등)"
+        value="${inputValue}"
+        ${this.isEditing ? "readonly" : ""}
+      />
+      <button type="button" class="todo-btn">${label}</button>
     `;
 
     this.bindEvents();
