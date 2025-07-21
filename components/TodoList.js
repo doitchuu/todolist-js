@@ -1,6 +1,8 @@
 function TodoList($container, store) {
+  const { getState, setState, subscribe } = store;
+
   this.render = function () {
-    const todoList = store.getState();
+    const todoList = getState();
     const todoKeyList = Object.keys(todoList);
     const isTodoListEmpty = todoKeyList.length === 0;
 
@@ -33,9 +35,9 @@ function TodoList($container, store) {
                   todo.isCompleted ? "_completed" : ""
                 }.svg" />
               </button>
-              <span class="todo-text">${todo.name}</span>
+              <span class="todo-text" data-key="${key}">${todo.name}</span>
             </div>
-            <button type="button" class="todo-delete-btn">
+            <button type="button" class="todo-delete-btn" data-key="${key}">
               <img src="./assets/delete.svg" />
             </button>
           </li>
@@ -44,9 +46,43 @@ function TodoList($container, store) {
           .join("")}
       </ul>
     `;
+
+    const deleteButtons = $container.querySelectorAll(".todo-delete-btn");
+    const todoTexts = $container.querySelectorAll(".todo-text");
+
+    deleteButtons.forEach((deleteButton) => {
+      const handleClick = () => {
+        const key = deleteButton.dataset.key;
+        delete todoList[key];
+
+        setState(todoList);
+      };
+
+      deleteButton.removeEventListener("click", handleClick);
+      deleteButton.addEventListener("click", handleClick);
+    });
+
+    todoTexts.forEach((todoText) => {
+      const handleClick = () => {
+        const { key } = todoText.dataset;
+        const todo = todoList[key];
+
+        setState({
+          ...todoList,
+          [key]: {
+            ...todo,
+            isCompleted: !todo.isCompleted,
+          },
+        });
+      };
+
+      todoText.removeEventListener("click", handleClick);
+      todoText.addEventListener("click", handleClick);
+    });
   };
 
-  store.subscribe(this.render);
+  this.render();
+  subscribe(this.render);
 }
 
 export default TodoList;

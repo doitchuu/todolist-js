@@ -20,6 +20,7 @@ function TodoCount($container, store) {
     `;
   };
 
+  this.render();
   subscribe(this.render);
 }
 
