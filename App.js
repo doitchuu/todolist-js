@@ -34,10 +34,6 @@ function App() {
       document.getElementById("todo-controls"),
       store
     );
-
-    this.todoCount.render();
-    this.todoList.render();
-    this.todoControls.render();
   };
 
   this.onAdd = (text) => {
