@@ -1,5 +1,7 @@
 function createStore() {
-  let data = {};
+  const localStorage = window.localStorage;
+  const todos = localStorage.getItem("todo");
+  let data = JSON.parse(todos) ?? {};
   const listeners = [];
 
   return {
@@ -8,6 +10,7 @@ function createStore() {
     },
     setState: (newState) => {
       data = { ...newState };
+      localStorage.setItem("todo", JSON.stringify(data));
       listeners.forEach((listener) => listener());
     },
     subscribe: (func) => {
