@@ -26,10 +26,9 @@ function TodoControls($container, store) {
 
       setState(updatedTodoList);
     });
-
-    this.render();
   };
 
+  this.render();
   subscribe(this.render);
 }
 
