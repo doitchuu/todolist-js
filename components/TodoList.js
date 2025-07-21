@@ -1,12 +1,11 @@
-function TodoList($container, data) {
-  this.$container = $container;
-  this.data = data;
-
+function TodoList($container, store) {
   this.render = function () {
-    const isTodoListEmpty = this.data.length === 0;
+    const todoList = store.getState();
+    const todoKeyList = Object.keys(todoList);
+    const isTodoListEmpty = todoKeyList.length === 0;
 
     if (isTodoListEmpty) {
-      this.$container.innerHTML = `
+      $container.innerHTML = `
         <div class="no-todo">
           <img src="./assets/no_todo.webp" class="image-no-todo" alt="no todolist" />
           <p class="description">할 일이 없어요.
@@ -19,14 +18,15 @@ function TodoList($container, data) {
       return;
     }
 
-    this.$container.innerHTML = `
+    $container.innerHTML = `
       <ul class="todo-items">
-        ${this.data
-          .map(
-            (todo, index) => `
+        ${todoKeyList
+          .map((key, index) => {
+            const todo = todoList[key];
+            return `
           <li class="todo-item ${
             todo.isCompleted ? "completed" : ""
-          }" data-index="${index}">
+          }" data-index="${index}" id="${todo.id}">
             <div class="todo-item-content">
               <button type="button" class="checkbox">
                 <img src="./assets/checkbox${
@@ -39,14 +39,14 @@ function TodoList($container, data) {
               <img src="./assets/delete.svg" />
             </button>
           </li>
-        `
-          )
+        `;
+          })
           .join("")}
       </ul>
     `;
   };
 
-  this.render();
+  store.subscribe(this.render);
 }
 
 export default TodoList;

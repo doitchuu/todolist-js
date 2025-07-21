@@ -1,24 +1,12 @@
+import createStore from "./createStore.js";
+
 import TodoHeader from "./components/TodoHeader.js";
 import TodoCount from "./components/TodoCount.js";
 import TodoInput from "./components/TodoInput.js";
 import TodoList from "./components/TodoList.js";
 import TodoControls from "./components/TodoControls.js";
 
-import { model } from "./model/model.js";
-
 function App() {
-  this.data = [];
-  this.todoHeader = null;
-  this.todoCount = null;
-  this.todoInput = null;
-  this.todoList = null;
-  this.TodoControls = null;
-
-  this.isEditing = false;
-  this.editingText = "";
-  this.totalCount = 0;
-  this.completedCount = 0;
-
   this.createAppLayout = () => {
     document.getElementById("todo-list").innerHTML = `
       <div id="todo-header"></div>
@@ -31,27 +19,25 @@ function App() {
     `;
   };
 
-  this.render = () => {
+  this.render = (store) => {
     this.todoHeader = new TodoHeader(document.getElementById("todo-header"));
     this.todoCount = new TodoCount(
-      document.getElementById("todo-content-title")
+      document.getElementById("todo-content-title"),
+      store
     );
     this.todoInput = new TodoInput({
       $container: document.getElementById("todo-input"),
-      isEditing: this.isEditing,
-      editingText: this.editingText,
-      onAdd: this.onAdd,
-      onUpdate: this.onUpdate,
+      store,
     });
-    this.todoList = new TodoList(
-      document.getElementById("todo-items"),
-      this.data
-    );
+    this.todoList = new TodoList(document.getElementById("todo-items"), store);
     this.todoControls = new TodoControls(
       document.getElementById("todo-controls"),
-      this.totalCount,
-      this.completedCount
+      store
     );
+
+    this.todoCount.render();
+    this.todoList.render();
+    this.todoControls.render();
   };
 
   this.onAdd = (text) => {
@@ -71,17 +57,11 @@ function App() {
     }
   };
 
-  this.onUpdate = () => {};
-
   this.init = () => {
-    this.data = model;
-    this.createAppLayout();
-    this.render();
-  };
+    const store = createStore();
 
-  this.setState = (newData) => {
-    this.data = newData;
-    this.render();
+    this.createAppLayout();
+    this.render(store);
   };
 
   this.init();

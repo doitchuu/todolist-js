@@ -1,19 +1,11 @@
-function TodoInput({
-  $container,
-  isEditing = false,
-  editingText,
-  onAdd,
-  onUpdate,
-}) {
+function TodoInput({ $container, store }) {
   this.$container = $container;
-  this.isEditing = isEditing;
-  this.editingText = editingText;
-  this.onAdd = onAdd;
-  this.onUpdate = onUpdate;
+  const { getState, setState } = store;
 
   this.render = function () {
-    const label = this.isEditing ? "수정" : "추가";
-    const inputValue = this.isEditing ? this.editingText : "";
+    const label = this.editingTodo ? "수정" : "추가";
+    const inputValue = this.editingTodo ? this.editingTodo.name : "";
+    const isCompleted = this.editingTodo && this.editingTodo.isCompleted;
 
     this.$container.innerHTML = `
       <input
@@ -21,7 +13,7 @@ function TodoInput({
         name="todo-input"
         placeholder="할 일 입력(예: 아침 런닝하기 등)"
         value="${inputValue}"
-        ${this.isEditing ? "readonly" : ""}
+        ${isCompleted ? "readonly" : ""}
       />
       <button type="button" class="todo-btn">${label}</button>
     `;
@@ -49,12 +41,14 @@ function TodoInput({
     const inputValue = input.value.trim();
 
     if (inputValue) {
-      if (this.isEditing) {
-        this.onUpdate(inputValue);
-        return;
-      }
+      const todoList = getState();
+      const timeStamp = Date.now().toString();
 
-      this.onAdd(inputValue);
+      setState({
+        ...todoList,
+        [timeStamp]: { name: inputValue, isCompleted: false },
+      });
+
       input.value = "";
     }
   };
