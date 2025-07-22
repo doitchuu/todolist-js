@@ -1,15 +1,18 @@
 function createStore() {
   const localStorage = window.localStorage;
   const todos = localStorage.getItem("todo");
-  let data = JSON.parse(todos) ?? {};
+  let data = JSON.parse(todos) ?? { todos: {}, editingTodo: null };
   const listeners = [];
 
   return {
     getState: () => {
-      return { ...data };
+      return {
+        ...data,
+        todos: { ...(data.todos || {}) },
+      };
     },
     setState: (newState) => {
-      data = { ...newState };
+      data = { ...data, ...newState };
       localStorage.setItem("todo", JSON.stringify(data));
       listeners.forEach((listener) => listener());
     },

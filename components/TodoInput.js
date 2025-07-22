@@ -1,11 +1,12 @@
-function TodoInput({ $container, store }) {
+function TodoInput($container, store) {
   this.$container = $container;
-  const { getState, setState } = store;
+  const { getState, setState, subscribe } = store;
 
-  this.render = function () {
-    const label = this.editingTodo ? "수정" : "추가";
-    const inputValue = this.editingTodo ? this.editingTodo.name : "";
-    const isCompleted = this.editingTodo && this.editingTodo.isCompleted;
+  this.render = () => {
+    const { editingTodo } = getState();
+    const label = editingTodo ? "수정" : "추가";
+    const inputValue = editingTodo ? editingTodo.name : "";
+    const isCompleted = editingTodo && editingTodo.isCompleted;
 
     this.$container.innerHTML = `
       <input
@@ -21,43 +22,66 @@ function TodoInput({ $container, store }) {
     this.bindEvents();
   };
 
-  this.bindEvents = function () {
+  this.bindEvents = () => {
     const input = this.$container.querySelector('input[name="todo-input"]');
     const button = this.$container.querySelector(".todo-btn");
 
-    input.addEventListener("keypress", (e) => {
+    const handleInputKeyPress = (e) => {
       if (e.key === "Enter") {
         this.handleSubmit();
       }
-    });
-
-    button.addEventListener("click", () => {
+    };
+    const handleButtonClick = () => {
       this.handleSubmit();
-    });
+    };
+
+    input.removeEventListener("keypress", handleInputKeyPress);
+    input.addEventListener("keypress", handleInputKeyPress);
+
+    button.removeEventListener("click", handleButtonClick);
+    button.addEventListener("click", handleButtonClick);
   };
 
-  this.handleSubmit = function () {
+  this.handleSubmit = () => {
     const input = this.$container.querySelector('input[name="todo-input"]');
     const inputValue = input.value.trim();
+    const { editingTodo, todos } = getState();
 
-    if (inputValue) {
-      const todoList = getState();
+    if (!inputValue) {
+      return;
+    }
+
+    if (editingTodo) {
+      setState({
+        todos: {
+          ...todos,
+          [editingTodo.id]: {
+            ...editingTodo,
+            name: inputValue,
+          },
+        },
+        editingTodo: null,
+      });
+    } else {
       const timeStamp = Date.now().toString();
 
       setState({
-        ...todoList,
-        [timeStamp]: {
-          name: inputValue,
-          isCompleted: false,
-          createAt: timeStamp,
+        todos: {
+          ...todos,
+          [timeStamp]: {
+            name: inputValue,
+            isCompleted: false,
+            createAt: timeStamp,
+          },
         },
       });
-
-      input.value = "";
     }
+
+    input.value = "";
   };
 
   this.render();
+  subscribe(this.render);
 }
 
 export default TodoInput;

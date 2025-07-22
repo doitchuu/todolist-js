@@ -1,7 +1,7 @@
 function TodoHeader($container) {
   this.$container = $container;
 
-  this.render = function () {
+  this.render = () => {
     this.$container.innerHTML = `
       <img src="./assets/logo.svg" class="image-logo" alt="로고" />
       <h3 class="header-title">Todolist</h3>

@@ -1,15 +1,16 @@
 function TodoCount($container, store) {
+  this.$container = $container;
   const { getState, subscribe } = store;
 
-  this.render = function () {
-    const todoList = getState();
-    const keyList = Object.keys(todoList);
+  this.render = () => {
+    const { todos } = getState();
+    const keyList = Object.keys(todos);
     const totalCount = keyList.length;
     const completedCount = keyList.filter((key) => {
-      return todoList[key].isCompleted;
+      return todos[key].isCompleted;
     }).length;
 
-    $container.innerHTML = `
+    this.$container.innerHTML = `
       <div class="count-container">
         <h5 class="count-label">할 일 전체</h5>
         <p class="total-count">${totalCount}</p>

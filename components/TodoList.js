@@ -1,9 +1,9 @@
 function TodoList($container, store) {
   const { getState, setState, subscribe } = store;
 
-  this.render = function () {
-    const todoList = getState();
-    const todoKeyList = Object.keys(todoList);
+  this.render = () => {
+    const { todos } = getState();
+    const todoKeyList = Object.keys(todos);
     const isTodoListEmpty = todoKeyList.length === 0;
 
     if (isTodoListEmpty) {
@@ -16,7 +16,6 @@ function TodoList($container, store) {
           </p>
         </div>
       `;
-
       return;
     }
 
@@ -24,13 +23,13 @@ function TodoList($container, store) {
       <ul class="todo-items">
         ${todoKeyList
           .map((key, index) => {
-            const todo = todoList[key];
+            const todo = todos[key];
             return `
           <li class="todo-item ${
             todo.isCompleted ? "completed" : ""
-          }" data-index="${index}" id="${todo.id}">
+          }" data-index="${index}" id="${key}">
             <div class="todo-item-content">
-              <button type="button" class="checkbox">
+              <button type="button" class="checkbox" data-key="${key}">
                 <img src="./assets/checkbox${
                   todo.isCompleted ? "_completed" : ""
                 }.svg" />
@@ -47,37 +46,62 @@ function TodoList($container, store) {
       </ul>
     `;
 
+    this.bindEvents();
+  };
+
+  this.bindEvents = () => {
+    const { todos, editingTodo } = getState();
+
     const deleteButtons = $container.querySelectorAll(".todo-delete-btn");
-    const todoTexts = $container.querySelectorAll(".todo-text");
 
     deleteButtons.forEach((deleteButton) => {
-      const handleClick = () => {
+      const handleDeleteClick = () => {
         const key = deleteButton.dataset.key;
-        delete todoList[key];
-
-        setState(todoList);
-      };
-
-      deleteButton.removeEventListener("click", handleClick);
-      deleteButton.addEventListener("click", handleClick);
-    });
-
-    todoTexts.forEach((todoText) => {
-      const handleClick = () => {
-        const { key } = todoText.dataset;
-        const todo = todoList[key];
-
+        const newTodos = { ...todos };
+        delete newTodos[key];
         setState({
-          ...todoList,
-          [key]: {
-            ...todo,
-            isCompleted: !todo.isCompleted,
-          },
+          todos: newTodos,
+          editingTodo:
+            editingTodo && editingTodo.id === key ? null : editingTodo,
         });
       };
 
-      todoText.removeEventListener("click", handleClick);
-      todoText.addEventListener("click", handleClick);
+      deleteButton.removeEventListener("click", handleDeleteClick);
+      deleteButton.addEventListener("click", handleDeleteClick);
+    });
+
+    const checkboxs = $container.querySelectorAll(".checkbox");
+
+    checkboxs.forEach((checkbox) => {
+      const handleEditClick = () => {
+        const { key } = checkbox.dataset;
+        setState({ editingTodo: { ...todos[key], id: key } });
+      };
+
+      checkbox.removeEventListener("click", handleEditClick);
+      checkbox.addEventListener("click", handleEditClick);
+    });
+
+    const todoTexts = $container.querySelectorAll(".todo-text");
+    todoTexts.forEach((todoText) => {
+      const handleToggleCompleteClick = () => {
+        const { key } = todoText.dataset;
+        const todo = todos[key];
+
+        setState({
+          todos: {
+            ...todos,
+            [key]: {
+              ...todo,
+              isCompleted: !todo.isCompleted,
+            },
+          },
+          editingTodo,
+        });
+      };
+
+      todoText.removeEventListener("click", handleToggleCompleteClick);
+      todoText.addEventListener("click", handleToggleCompleteClick);
     });
   };
 
