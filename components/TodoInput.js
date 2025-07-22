@@ -46,7 +46,11 @@ function TodoInput({ $container, store }) {
 
       setState({
         ...todoList,
-        [timeStamp]: { name: inputValue, isCompleted: false },
+        [timeStamp]: {
+          name: inputValue,
+          isCompleted: false,
+          createAt: timeStamp,
+        },
       });
 
       input.value = "";
