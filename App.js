@@ -7,6 +7,12 @@ import TodoList from "./components/TodoList.js";
 import TodoControls from "./components/TodoControls.js";
 
 function App() {
+  this.init = () => {
+    const store = createStore();
+    this.createAppLayout();
+    this.render(store);
+  };
+
   this.createAppLayout = () => {
     document.getElementById("todo-list").innerHTML = `
       <div id="todo-header"></div>
@@ -34,30 +40,6 @@ function App() {
       document.getElementById("todo-controls"),
       store
     );
-  };
-
-  this.onAdd = (text) => {
-    const todo = text.trim();
-
-    if (todo) {
-      const newTodos = [
-        ...this.data,
-        {
-          id: Date.now().toString(),
-          name: todo,
-          isCompleted: false,
-        },
-      ];
-
-      this.setState(newTodos);
-    }
-  };
-
-  this.init = () => {
-    const store = createStore();
-
-    this.createAppLayout();
-    this.render(store);
   };
 
   this.init();
