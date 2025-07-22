@@ -31,10 +31,10 @@ function App() {
       document.getElementById("todo-content-title"),
       store
     );
-    this.todoInput = new TodoInput({
-      $container: document.getElementById("todo-input"),
-      store,
-    });
+    this.todoInput = new TodoInput(
+      document.getElementById("todo-input"),
+      store
+    );
     this.todoList = new TodoList(document.getElementById("todo-items"), store);
     this.todoControls = new TodoControls(
       document.getElementById("todo-controls"),
