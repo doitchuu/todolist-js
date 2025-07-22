@@ -1,0 +1,153 @@
+#todo-list {
+  max-width: 500px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+
+  background-color: var(--gray-100);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#todo-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 0;
+}
+
+.image-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.header-title {
+  width: 332px;
+  height: 29px;
+
+  color: var(--primary-color);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+/* TodoInput 컴포넌트 css  */
+#todo-input {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  height: 48px;
+  gap: 12px;
+}
+
+#todo-input input {
+  flex: 1;
+  padding: 16px;
+  height: 48px;
+  border: none;
+  border-radius: 4px;
+
+  background-color: var(--gray-300);
+
+  transition: all 0.2s ease;
+}
+
+#todo-input input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+#todo-input button {
+  padding: 12px 16px;
+  height: 48px;
+  min-width: 80px;
+  border: none;
+  border-radius: 4px;
+
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#todo-input button:hover {
+  opacity: 90%;
+}
+
+.todo-content {
+  padding-bottom: 80px;
+}
+
+/* TodoControl 컴포넌트 css  */
+#todo-controls {
+  position: fixed;
+  bottom: 24px;
+  left: calc(50% - 80px);
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  width: fit-content;
+  height: fit-content;
+  border: solid 1px var(--gray-100);
+  border-radius: 24px;
+  gap: 24px;
+
+  box-shadow: 2px 2px 12px 4px rgba(144, 144, 144, 0.1);
+}
+
+.all-completed-btn,
+.all-delete-btn {
+  border: none;
+  background-color: white;
+}
+
+.divider {
+  width: 1px;
+  height: 12px;
+
+  background-color: var(--gray-200);
+}
+
+.all-completed-btn {
+  color: var(--primary-color);
+}
+
+.all-delete-btn {
+  color: var(--gray-400);
+}
+
+/* TodoCount 컴포넌트 css */
+#todo-content-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.count-container {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.count-label {
+  color: var(--gray-600);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.total-count {
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+.completed-count {
+  color: var(--primary-color);
+}
