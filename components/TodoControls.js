@@ -16,18 +16,22 @@ function TodoControls($container, store) {
     const completeAllButton = $container.querySelector(".all-completed-btn");
 
     const handleDeleteAll = () => {
-      setState({ todos: {}, editingTodo: null });
+      if (window.confirm("전체 할 일을 삭제하시겠어요?")) {
+        setState({ todos: {}, editingTodo: null });
+      }
     };
 
     const handleCompleteAll = () => {
-      const { todos } = getState();
-      const todoKeyList = Object.keys(todos);
-      const updatedTodos = {};
+      if (window.confirm("전체 할 일을 완료할까요?")) {
+        const { todos } = getState();
+        const todoKeyList = Object.keys(todos);
+        const updatedTodos = {};
+        todoKeyList.forEach((key) => {
+          updatedTodos[key] = { ...todos[key], isCompleted: true };
+        });
 
-      todoKeyList.forEach((key) => {
-        updatedTodos[key] = { ...todos[key], isCompleted: true };
-      });
-      setState({ todos: updatedTodos });
+        setState({ todos: updatedTodos });
+      }
     };
 
     deleteAllButton.removeEventListener("click", handleDeleteAll);
