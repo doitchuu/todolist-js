@@ -85,7 +85,7 @@
 #todo-controls {
   position: fixed;
   bottom: 24px;
-  left: calc(50% - 80px);
+  left: calc(50% - 100px);
   z-index: 1000;
 
   display: flex;
@@ -150,4 +150,76 @@
 
 .completed-count {
   color: var(--primary-color);
+}
+
+/* TodoList 컴포넌트 css */
+.todo-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+  background-color: var(--gray-100);
+}
+
+.todo-item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.todo-item.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.todo-text {
+  font-size: 14px;
+  color: var(--gray-600);
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.todo-delete-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.todo-delete-btn:hover {
+  transform: scale(1.1);
+}
+
+.todo-delete-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.no-todo {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.image-no-todo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.description {
+  line-height: 1.6;
 }
