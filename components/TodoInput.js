@@ -1,3 +1,5 @@
+import getTodoInputError from "../utils/getTodoInputError.js";
+
 function TodoInput($container, store) {
   this.$container = $container;
   const { getState, setState, subscribe } = store;
@@ -9,14 +11,17 @@ function TodoInput($container, store) {
     const isCompleted = editingTodo && editingTodo.isCompleted;
 
     this.$container.innerHTML = `
-      <input
-        type="text"
-        name="todo-input"
-        placeholder="할 일 입력(예: 아침 런닝하기 등)"
-        value="${inputValue}"
-        ${isCompleted ? "readonly" : ""}
-      />
-      <button type="button" class="todo-btn">${label}</button>
+      <div class="input-group">
+        <input
+          type="text"
+          name="todo-input"
+          placeholder="할 일 입력(예: 아침 런닝하기 등)"
+          value="${inputValue}"
+          ${isCompleted ? "readonly" : ""}
+        />
+        <button type="button" class="todo-btn">${label}</button>
+      </div>
+      <p class="error-message"></p>
     `;
 
     this.bindEvents();
@@ -35,21 +40,43 @@ function TodoInput($container, store) {
       this.handleSubmit();
     };
 
+    const handleInputChange = () => {
+      this.hideErrorMessage();
+    };
+
     input.removeEventListener("keypress", handleInputKeyPress);
     input.addEventListener("keypress", handleInputKeyPress);
 
+    input.removeEventListener("input", handleInputChange);
+    input.addEventListener("input", handleInputChange);
+
     button.removeEventListener("click", handleButtonClick);
     button.addEventListener("click", handleButtonClick);
+  };
+
+  this.showErrorMessage = (message) => {
+    const errorElement = this.$container.querySelector(".error-message");
+    errorElement.textContent = message;
+    errorElement.classList.add("show");
+  };
+
+  this.hideErrorMessage = () => {
+    const errorElement = this.$container.querySelector(".error-message");
+    errorElement.classList.remove("show");
   };
 
   this.handleSubmit = () => {
     const input = this.$container.querySelector('input[name="todo-input"]');
     const inputValue = input.value.trim();
     const { editingTodo, todos } = getState();
+    const errorMessage = getTodoInputError(inputValue);
 
-    if (!inputValue) {
+    if (errorMessage) {
+      this.showErrorMessage(errorMessage);
       return;
     }
+
+    this.hideErrorMessage();
 
     if (editingTodo) {
       setState({
