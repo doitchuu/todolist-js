@@ -34,8 +34,14 @@
 /* TodoInput 컴포넌트 css  */
 #todo-input {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin: 12px 0;
+  gap: 8px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
   height: 48px;
   gap: 12px;
 }
@@ -75,6 +81,22 @@
 
 #todo-input button:hover {
   opacity: 90%;
+}
+
+.error-message {
+  min-height: 20px;
+  margin: 0;
+  padding-left: 4px;
+
+  color: #dc3545;
+  font-size: 14px;
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.error-message.show {
+  opacity: 1;
 }
 
 .todo-content {
